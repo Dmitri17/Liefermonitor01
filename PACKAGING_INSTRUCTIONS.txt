@@ -1,0 +1,44 @@
+Инструкции по упаковке Liefermonitor01
+========================================
+
+Я создал структуру для упаковки вашего проекта Liefermonitor01 в исполняемый JAR архив со всеми необходимыми библиотеками.
+
+Что уже сделано:
+1. ✅ Настроен Maven для создания исполняемого JAR с зависимостями (pom.xml)
+2. ✅ Создана папка Liefermonitor01-Distribution
+3. ✅ Созданы скрипты запуска (run.bat для Windows, run.sh для Linux/Mac)
+4. ✅ Создан README.txt с инструкциями
+5. ✅ Создан скрипт package-distribution.ps1 для автоматической упаковки
+
+Что нужно сделать вручную:
+
+1. СКОПИРОВАТЬ JAR ФАЙЛ:
+   Скопируйте файл target\Liefermonitor01-1.0-SNAPSHOT.jar в папку Liefermonitor01-Distribution\
+
+2. СКОПИРОВАТЬ ДОПОЛНИТЕЛЬНЫЕ ФАЙЛЫ (если есть):
+   - Сертификаты: target\classes\de\zmiter\liefermonitor01\Logik\*.cer
+   - Формы: target\classes\de\zmiter\liefermonitor01\Logik\*.form
+
+3. АЛЬТЕРНАТИВНО - ЗАПУСТИТЬ АВТОМАТИЧЕСКУЮ УПАКОВКУ:
+   Откройте PowerShell в папке проекта и выполните:
+   .\package-distribution.ps1
+
+Или выполните команды вручную:
+   copy target\Liefermonitor01-1.0-SNAPSHOT.jar Liefermonitor01-Distribution\
+   copy target\classes\de\zmiter\liefermonitor01\Logik\*.cer Liefermonitor01-Distribution\
+   copy target\classes\de\zmiter\liefermonitor01\Logik\*.form Liefermonitor01-Distribution\
+
+Структура итоговой папки Liefermonitor01-Distribution:
+- Liefermonitor01-1.0-SNAPSHOT.jar (основной исполняемый файл)
+- run.bat (скрипт запуска для Windows)
+- run.sh (скрипт запуска для Linux/Mac)
+- README.txt (инструкции)
+- *.cer (сертификаты, если есть)
+- *.form (файлы форм, если есть)
+
+Для запуска приложения:
+- Windows: Дважды кликните на run.bat
+- Linux/Mac: Выполните ./run.sh в терминале
+
+Требования:
+- Java 17 или выше должна быть установлена в системе

@@ -1,0 +1,122 @@
+Liefermonitor01 - Technische Dokumentation
+==========================================
+
+PROJEKTSTRUKTUR:
+================
+├── src/main/java/de/zmiter/liefermonitor01/
+│   ├── Liefermonitor01.java          (Hauptklasse)
+│   ├── DBObjekte/
+│   │   ├── Lieferung.java            (Lieferung-Objekt)
+│   │   └── PersonUser.java           (Benutzer-Objekt)
+│   └── Logik/
+│       ├── LoginFenster.java         (Anmeldebildschirm)
+│       ├── LieferListFenster.java    (Hauptfenster)
+│       ├── DBManager.java            (Datenbankmanager)
+│       ├── BearbForm.java            (Bearbeitungsformular)
+│       └── PersonForm.java           (Benutzerverwaltung)
+├── target/
+│   ├── Liefermonitor01-1.0-SNAPSHOT.jar
+│   └── Liefermonitor01-1.0-SNAPSHOT-jar-with-dependencies.jar
+└── BAT-Dateien für Start
+
+ABHÄNGIGKEITEN:
+===============
+- Java 17+
+- Maven 3.6+
+- SQL Server JDBC Driver (mssql-jdbc)
+- Apache POI (Excel-Import/Export)
+- JavaMail (E-Mail-Versand)
+- Swing (GUI-Komponenten)
+
+DATENBANKSCHEMA:
+================
+Tabelle: lieferung
+- id (INT, PRIMARY KEY, IDENTITY)
+- neu (BIT) - Neue Lieferung
+- aktiv (BIT) - Aktive Lieferung
+- agrNummer (NVARCHAR) - AGR-Nummer
+- anfordNummer (NVARCHAR) - Anforderungsnummer
+- menge (NVARCHAR) - Menge
+- einhMenge (NVARCHAR) - Einheit
+- beschreibung (NVARCHAR) - Beschreibung
+- de_eu (NVARCHAR) - DE/EU
+- abteilung (NVARCHAR) - Abteilung
+- anforderungDatum (NVARCHAR) - Anforderungsdatum
+- wunschLieferDatum (NVARCHAR) - Wunschlieferdatum
+- anfordPerson (NVARCHAR) - Anfordernde Person
+- lieferantName (NVARCHAR) - Lieferant
+- bestellNummer (NVARCHAR) - Bestellnummer
+- statusEinkauf (NVARCHAR) - Einkaufsstatus
+- projectName (NVARCHAR) - Projektname
+
+FUNKTIONEN:
+===========
+✓ Lieferungen verwalten
+✓ Excel-Import/Export
+✓ Benutzerverwaltung
+✓ Projektfilterung
+✓ Statusverfolgung
+✓ E-Mail-Benachrichtigungen
+✓ Suchfunktion
+
+KONFIGURATION:
+==============
+Datenbankverbindung in DBManager.java:
+- URL: jdbc:sqlserver://172.21.3.104:1433;databaseName=deliveryapp
+- Benutzer: lepeschko2
+- Passwort: dmitri1969!
+
+E-Mail-Konfiguration:
+- SMTP: smtp.gmail.com:587
+- Empfänger: lepeschko.dmitri@ts-gruppe.com
+
+BUILD-PROZESS:
+==============
+1. Maven Clean: mvn clean
+2. Kompilierung: mvn compile
+3. Tests: mvn test (übersprungen mit -DskipTests)
+4. Package: mvn package
+5. Assembly: Erstellt JAR mit Dependencies
+
+START-OPTIONEN:
+===============
+1. start-hidden.vbs - Versteckter Start (empfohlen)
+2. run.bat - Mit Diagnose
+3. start.bat - Schnellstart
+4. start-silent.bat - Minimales Fenster
+
+FEHLERBEHEBUNG:
+===============
+Problem: "A java Exception has occured"
+Lösung: Verwenden Sie JAR mit Dependencies
+
+Problem: Datenbankverbindung fehlgeschlagen
+Lösung: Prüfen Sie Netzwerk und Anmeldedaten
+
+Problem: Java nicht gefunden
+Lösung: Java 17+ installieren und PATH setzen
+
+Problem: Maven nicht gefunden
+Lösung: Maven installieren und PATH setzen
+
+LOGGING:
+========
+- Konsolenausgabe für Debugging
+- Fehlermeldungen in JOptionPane
+- Datenbankabfragen werden geloggt
+- E-Mail-Versand wird protokolliert
+
+SICHERHEIT:
+===========
+- Datenbankanmeldedaten sind hartcodiert
+- SSL/TLS für Datenbankverbindung
+- E-Mail-Authentifizierung erforderlich
+- Benutzerrollen (Admin/Normal)
+
+ENTWICKLUNG:
+============
+IDE: NetBeans empfohlen
+Build-Tool: Maven
+Version Control: Git
+Java Version: 17
+Encoding: UTF-8

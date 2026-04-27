@@ -1,0 +1,42 @@
+Liefermonitor01 - Kurzanleitung
+===============================
+
+SCHNELLSTART:
+=============
+1. Doppelklick auf: start-hidden.vbs
+   (Startet ohne schwarzes Fenster)
+
+2. Oder: Doppelklick auf: run.bat
+   (Mit Diagnose und Fehlermeldungen)
+
+ERSTELLUNG:
+===========
+1. Doppelklick auf: build.bat
+   (Erstellt das Projekt)
+
+2. Oder: Doppelklick auf: rebuild-and-run.bat
+   (Erstellt und startet)
+
+ANFORDERUNGEN:
+==============
+✓ Java 17+ installiert
+✓ Maven installiert (für Erstellung)
+✓ Datenbankverbindung verfügbar
+
+DATENBANK:
+==========
+Server: 172.21.3.104:1433
+Datenbank: deliveryapp
+Benutzer: lepeschko2
+
+PROBLEME?
+=========
+→ Verwenden Sie run.bat für Diagnose
+→ Prüfen Sie Java: java -version
+→ Prüfen Sie Maven: mvn -version
+→ Prüfen Sie Netzwerkverbindung
+
+KONTAKT:
+========
+Problem melden: Menü "Hilfe?" → "Problem melden"
+Email: lepeschko.dmitri@ts-gruppe.com

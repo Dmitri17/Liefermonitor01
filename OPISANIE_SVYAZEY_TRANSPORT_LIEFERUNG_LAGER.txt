@@ -1,0 +1,155 @@
+Описание связей полей и методов сохранения
+Проект: Liefermonitor01
+Таблицы: transport, lieferung, lager
+
+==================================================
+1) Основные таблицы и модели
+==================================================
+- Таблица transport:
+  - В коде представлена как массив из 30 полей (feld01..feld30) + id.
+  - В UI-таблице ключевые колонки:
+    - "Bestellnummer" (индекс values[1])
+    - "WE" (индекс values[4])
+    - "Kolli-No." (индекс values[5])
+    - "gross weight" (индекс values[6])
+    - "Mesurements" (индекс values[7])
+    - "Invoice" (индекс values[10])
+    - "Container No." (индекс values[12])
+    - "Bemerkungen" (индекс values[14])
+
+- Таблица lieferung:
+  - Модель: de.zmiter.liefermonitor01.DBObjekte.Lieferung
+  - Ключевые поля синхронизации:
+    - bestellNummer
+    - warenEingangTS
+    - kolli
+    - containerNr
+    - kommentarBS
+    - gewicht
+    - laenge / breite / hoehe
+
+- Таблица lager:
+  - Модель: de.zmiter.liefermonitor01.DBObjekte.Artikel
+  - Ключевые поля синхронизации:
+    - colli
+    - good_Receipt
+    - container_Number
+    - add_Info
+    - invoice_Proforma
+    - weight
+    - dimention
+
+==================================================
+2) Методы DBManager, которые сохраняют в БД
+==================================================
+Класс: de.zmiter.liefermonitor01.Logik.DBManager
+
+- transport:
+  - addTransportRecord(String[] values)
+  - updateTransportRecord(int id, String[] values)
+  - deleteTransportRecord(int id)
+  - searchTransportRecords(String searchText)  [чтение]
+
+- lieferung:
+  - updateTabLieferungen(Lieferung lif)
+  - getAllLieferungen()  [чтение]
+  - getLieferungByBestellnummerForUi(String bestellnummerUi)  [чтение/поиск]
+
+- lager:
+  - getArtikelByAnford(String anfordNummer)  [чтение]
+  - updateArtikel(Artikel artikel)
+
+==================================================
+3) Сохранение из TransportTableFrame (редактирование по двойному клику)
+==================================================
+Класс: de.zmiter.liefermonitor01.Logik.TransportTableFrame
+
+3.1. Точка входа сохранения
+- Метод: openEditDialogForSelectedRow()
+  - Считывает поля формы в массив values[]
+  - Сохраняет строку transport через:
+    - DBManager.updateTransportRecord(id, values)
+  - Затем запускает синхронизацию в lieferung/lager через:
+    - syncLieferungAfterTransportUpdate(dbManager, values, originalBestellnummer)
+
+3.2. Синхронизация transport -> lieferung
+- Метод: syncLieferungAfterTransportUpdate(...)
+  - Поиск нужной Lieferung:
+    - findLieferungByBestellnummer(...)
+    - с учетом fallback bestellnummer и нормализации/поиска по токенам
+  - Основные присваивания:
+    - values[4] ("WE") -> Lieferung.warenEingangTS
+    - values[5] ("Kolli-No.") -> Lieferung.kolli
+    - values[12] ("Container No.") -> Lieferung.containerNr
+    - values[14] ("Bemerkungen") -> Lieferung.kommentarBS
+    - values[6] ("gross weight") -> Lieferung.gewicht
+    - values[7] ("Mesurements") -> Lieferung.laenge/breite/hoehe (через парсер)
+  - Дополнительная логика накопления:
+    - значение WE добавляется в Lieferung.bestellNummer через запятую
+      (без дублей), чтобы хранить несколько WE-значений
+  - Сохранение в БД:
+    - DBManager.updateTabLieferungen(fullLieferung)
+
+3.3. Синхронизация transport -> lager
+- Метод: updateRelatedLagerEntriesFromTransport(...)
+  - Находит связанные Artikel по anfordNummer из найденной Lieferung:
+    - DBManager.getArtikelByAnford(anford)
+  - Обновляет поля Artikel:
+    - kolliValue -> artikel.colli
+    - weValue -> artikel.good_Receipt
+    - containerNoValue -> artikel.container_Number
+    - bemerkungenValue -> artikel.add_Info
+    - invoiceValue -> artikel.invoice_Proforma
+    - grossWeightValue -> artikel.weight
+    - measurementsValue -> artikel.dimention
+  - Сохраняет каждую запись:
+    - DBManager.updateArtikel(artikel)
+
+==================================================
+4) Альтернативный рабочий путь (TransportFormM)
+==================================================
+Класс: de.zmiter.liefermonitor01.Logik.TransportFormM
+
+- Метод сохранения выбранной Lieferung из transport-таблицы
+  (внутренний flow из UI этой формы):
+  - Обновляет Lieferung:
+    - setKolli(...)
+    - setWarenEingangTS(...)
+    - setContainerNr(...)
+    - setKommentarBS(...)
+    - setGewicht(...)
+    - setLaenge/Breite/Hoehe через applyMeasurementsToLieferung(...)
+  - Пишет в БД:
+    - DBManager.updateTabLieferungen(fullLieferung)
+  - Затем обновляет связанные Artikel:
+    - updateRelatedLagerEntriesFromTransport(...)
+    - DBManager.updateArtikel(...)
+
+Примечание:
+- Логика синхронизации в TransportTableFrame и TransportFormM концептуально одинаковая:
+  сначала transport, затем lieferung, затем связанные записи lager.
+
+==================================================
+5) Ключи связи между таблицами
+==================================================
+- transport -> lieferung:
+  - основной ключ поиска: bestellNummer
+  - в коде учитываются вариации формата bestellNummer (включая SAP-хвосты и
+    составные значения через запятую)
+
+- lieferung -> lager:
+  - ключ: anfordNummer (из Lieferung)
+  - поиск связанных Artikel: DBManager.getArtikelByAnford(anfordNummer)
+
+==================================================
+6) Что важно учитывать при дальнейшей синхронизации полей
+==================================================
+- Если поле в transport может содержать несколько значений или служебные суффиксы,
+  сравнение по строгому equals часто недостаточно.
+- Для числовых/размерных полей лучше сохранять текущую схему:
+  - безопасный парсинг
+  - обновление только при непустых валидных значениях
+- Порядок сохранения лучше не менять:
+  1) transport
+  2) lieferung
+  3) lager

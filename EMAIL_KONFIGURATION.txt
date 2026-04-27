@@ -1,0 +1,69 @@
+KONFIGURATION DER EMAIL-FUNKTION FÜR PROBLEM MELDUNGEN
+========================================================
+
+WICHTIG: Bevor Sie die Email-Funktion nutzen können:
+
+1. MAVEN DEPENDENCIES AKTUALISIEREN
+   - Klicken Sie mit der rechten Maustaste auf das Projekt
+   - Wählen Sie "Clean and Build" oder führen Sie aus: mvn clean install
+   - Dies lädt die JavaMail Bibliothek herunter
+
+2. EMAIL-EINSTELLUNGEN ANPASSEN
+   Öffnen Sie: src/main/java/de/zmiter/liefermonitor01/Logik/LieferListFenster.java
+   
+   Suchen Sie die Methode: sendProblemEmail()
+   
+   Ändern Sie folgende Zeilen (ca. Zeile 1093-1099):
+   
+   final String RECIPIENT_EMAIL = "IHR-SUPPORT-EMAIL@FIRMA.DE";
+   final String SENDER_EMAIL = "IHR-EMAIL@GMAIL.COM";
+   final String SENDER_PASSWORD = "IHR-APP-PASSWORT";
+
+3. GMAIL APP-PASSWORT ERSTELLEN (falls Sie Gmail verwenden):
+   - Gehen Sie zu: https://myaccount.google.com/security
+   - Aktivieren Sie 2-Faktor-Authentifizierung
+   - Gehen Sie zu "App-Passwörter"
+   - Erstellen Sie ein neues App-Passwort für "Mail"
+   - Verwenden Sie dieses Passwort im Code (NICHT Ihr normales Gmail-Passwort!)
+
+4. FÜR ANDERE EMAIL-ANBIETER:
+   Ändern Sie auch:
+   
+   final String SMTP_HOST = "smtp.IHR-PROVIDER.de";
+   final String SMTP_PORT = "587";  // oder 465 für SSL
+   
+   Beispiele:
+   - Outlook/Hotmail: smtp.office365.com, Port 587
+   - Yahoo: smtp.mail.yahoo.com, Port 587
+   - GMX: mail.gmx.net, Port 587
+
+5. ALTERNATIVE: DATEI-SPEICHERUNG
+   Wenn Email nicht funktioniert, werden Meldungen automatisch gespeichert in:
+   problem_reports/problem_TIMESTAMP.txt
+
+NUTZUNG:
+--------
+Benutzer können nun im Menü "Hilfe? > Problem melden" Probleme melden.
+Ein Dialogfenster öffnet sich mit:
+- Name (wird automatisch aus PersonUser übernommen)
+- Email-Feld (muss ausgefüllt werden)
+- Passwort-Feld (für E-Mail - wird zur Authentifizierung verwendet)
+- Nachrichtenfeld (Beschreibung des Problems)
+- Senden/Abbrechen Buttons
+
+WICHTIG: 
+- Das System verwendet die in der Form eingegebenen E-Mail und Passwort
+- Das Passwort wird NUR für diese eine Sendung verwendet
+- Für Gmail MUSS ein App-Passwort verwendet werden (nicht das normale Passwort!)
+- Die E-Mail wird von der eingegebenen Adresse an lepeschko.dmitri@ts-gruppe.com gesendet
+
+SICHERHEIT:
+-----------
+WICHTIG: Speichern Sie NIEMALS Passwörter direkt im Code!
+Für Produktionsumgebungen sollten Sie:
+- Passwörter in einer separaten Konfigurationsdatei speichern
+- Oder Umgebungsvariablen verwenden
+- Oder einen separaten Email-Service nutzen
+
+Bei Fragen wenden Sie sich an Ihren IT-Administrator.
+
