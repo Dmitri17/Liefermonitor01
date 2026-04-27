@@ -65,10 +65,7 @@ public class DBManager {
     Lieferung lif = new Lieferung();
 
     // URL для SQL Server базы данных
-   // private static final String DB_URL = "jdbc:sqlserver://172.21.3.104:1433;databaseName=deliveryapp;encrypt=true;trustStore=mykeystore.jks;trustStorePassword=mypassword;encrypt=true;trustServerCertificate=true;";
-  
-  private static final String DB_URL = "jdbc:sqlserver://tsautodb01.ts-gruppe.com;databaseName=deliveryapp;encrypt=true;trustStore=mykeystore.jks;trustStorePassword=mypassword;encrypt=true;trustServerCertificate=true;";
-    
+   
     // tsautodb01.ts-gruppe.com”
     private static Connection connection;
     
